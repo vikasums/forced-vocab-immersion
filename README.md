@@ -29,11 +29,13 @@ An ultra-focused, full-screen hourly vocabulary learning application for macOS a
 ## Quick Start & Usage
 
 ### 1. Installation & Run
+The installer script automatically checks/installs Node.js (v20), installs PM2 globally, and resolves all application dependencies:
 ```bash
-# Install dependencies
-npm install
+# Run the self-sufficient installer
+chmod +x ./install.sh
+./install.sh
 
-# Start the macOS Menubar Application in foreground
+# Start the macOS Menubar Application in the foreground
 npm start
 ```
 

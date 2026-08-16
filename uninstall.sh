@@ -5,8 +5,11 @@ echo "--------------------------------------------------------"
 echo "  Forced Vocabulary Immersion App - Clean Uninstaller"
 echo "--------------------------------------------------------"
 
-# 1. Terminate running daemon process
-echo "Stopping active background application daemon..."
+# 1. Terminate running daemon processes (standard & PM2)
+echo "Stopping active background application daemons..."
+if command -v pm2 &> /dev/null; then
+    pm2 delete vocab-immersion 2>/dev/null || true
+fi
 pkill -f "forced-vocab-immersion" 2>/dev/null || true
 pkill -f "electron . --dev" 2>/dev/null || true
 

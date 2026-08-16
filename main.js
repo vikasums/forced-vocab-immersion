@@ -15,7 +15,7 @@ const logger = require('./src/engine/logger');
 let overlayWindow = null;
 let tray = null;
 let hourlyInterval = null;
-let targetLanguage = 'fr'; // Default target language: French
+let targetLanguage = 'en'; // Default target language: English
 
 /**
  * Trigger full-screen vocabulary popup
