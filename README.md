@@ -33,17 +33,73 @@ An ultra-focused, full-screen hourly vocabulary learning application for macOS a
 # Install dependencies
 npm install
 
-# Start the macOS Menubar Application
+# Start the macOS Menubar Application in foreground
 npm start
 ```
 
-### 2. Running Unit Tests
+### 2. Running in the Background (Node.js & macOS Services)
+
+#### Method A: Process Manager (PM2)
+PM2 is a robust Node.js process manager to keep the app running persistently in the background:
+```bash
+# Install PM2 globally
+npm install -g pm2
+
+# Start the Electron App silently in the background
+pm2 start "npm" --name "vocab-immersion" -- start
+
+# View running status
+pm2 status
+
+# Monitor live app logs
+pm2 logs vocab-immersion
+
+# Stop the background daemon
+pm2 stop vocab-immersion
+```
+
+#### Method B: macOS LaunchAgent Daemon
+To run it natively on boot using macOS's built-in service scheduler (equivalent to Homebrew services):
+1. Create a service file in `~/Library/LaunchAgents/com.vocab.immersion.plist`:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.vocab.immersion</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/node</string> <!-- Path to your Node binary -->
+        <string>/Users/vikasanand/genAI/language-learning/main.js</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/Users/vikasanand/Library/Logs/vocab-immersion-out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/vikasanand/Library/Logs/vocab-immersion-err.log</string>
+</dict>
+</plist>
+```
+2. Load and start the background agent:
+```bash
+launchctl load ~/Library/LaunchAgents/com.vocab.immersion.plist
+```
+3. Stop/Unload the agent:
+```bash
+launchctl unload ~/Library/LaunchAgents/com.vocab.immersion.plist
+```
+
+### 3. Running Unit Tests
 ```bash
 # Execute Jest unit test suite
 npm test
 ```
 
-### 3. Uninstall & Cleanup
+### 4. Uninstall & Cleanup
 ```bash
 # Run 1-click clean uninstaller script
 ./uninstall.sh
