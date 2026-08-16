@@ -81,8 +81,8 @@ To register the app as a native macOS service that runs silently at startup:
     <string>com.vocab.immersion</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/usr/local/bin/node</string> <!-- Path to your Node binary -->
-        <string>/Users/vikasanand/genAI/language-learning/main.js</string>
+        <string>/Users/vikasanand/genAI/language-learning/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron</string> <!-- Path to local Electron binary -->
+        <string>/Users/vikasanand/genAI/language-learning</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
