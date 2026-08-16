@@ -4,65 +4,74 @@ An ultra-focused, full-screen hourly vocabulary learning application for macOS a
 
 ---
 
+## About
+
+**Forced Vocabulary Immersion** is an hourly desktop learning enforcer. The application works by sliding a full-screen, highly aesthetic glassmorphic card over all active windows and desktop spaces once per hour, prompting you with a high-impact vocabulary word. To ensure consistent learning, the primary "I Understand" confirmation button is locked behind a mandatory **10-second viewing countdown**.
+
+The system is designed to respect your workflow: it features an immediate **Cross (X) exit button**, automatic **Zoom/Google Meet active session suppression**, a **3-hour snooze toggle**, and **non-stacking sleep handling** (only 1 popup appears when you wake your laptop).
+
+---
+
 ## Key Features
 
-1. **Hourly Forced Full-Screen Overlay**:
-   - Renders a floating glassmorphic full-screen card covering all macOS windows/spaces (`screen-saver` level).
-   - Enforces a mandatory **10-second viewing lock** on the primary "I Understand" completion button.
-2. **Instant Exit & Meeting Protection**:
-   - **Cross (X) Close Button**: Placed at top-right corner, immediately clickable from **0s**.
-   - **Zoom & Google Meet Guard**: Suppresses popups automatically during active Zoom calls or Google Meet browser sessions.
-   - **Pause for 3 Hours**: One-click snooze toggle available on popup UI and tray menu.
-   - **Manual Audio Playback**: High-quality MP3 audio pronunciation plays on demand (no auto-play).
-3. **Dual-Language French & English Support**:
-   - Configurable target language (French, English).
-   - French entries feature the French word, phonetic transcription, **both French & English definitions**, and **French usage examples with English translations**.
+1. **Hourly Full-Screen Overlay**:
+   - Covers all macOS workspaces and applications (`screen-saver` level bounds) without triggering native macOS space transitions (avoiding focus loss).
+   - Enforces a mandatory **10-second viewing lock** on the confirmation button with a visual circular progress ring.
+2. **Smart Meeting Guard & Snooze**:
+   - **Cross (X) Close Button**: Accessible at the top-right corner, clickable from **0s** for emergency bypass.
+   - **Meeting Protection**: Automatically queries active processes (`pgrep`) and browser tab contexts to suppress popups during active **Zoom** or **Google Meet** sessions.
+   - **Pause for 3 Hours**: Quick snooze toggle available on the popup UI and the system tray menu.
+   - **Manual Audio Playback**: Audios do not play automatically; a speaker icon speaks the word using macOS native `say` command with targeted accents (e.g. French `Amelie` or English `Samantha`).
+3. **Dual-Language Configuration**:
+   - **Default Target Language: English**.
+   - Supports both English and French. French cards render dual-language entries (Word + Phonetic + both French & English definitions + French example sentences with English translations).
 4. **Dynamic Public APIs & Spaced Repetition**:
-   - Real-time word fetching via **Datamuse API**, **Free Dictionary API**, and **Wiktionary translation endpoints**.
-   - **Phase 1 (Week 1)**: Hourly new unique words (no repeats).
-   - **Phase 2 (Week 2+)**: SuperMemo SM-2 Spaced Repetition revision popups + 4-option interactive mini-quizzes.
-5. **Zero-Residue macOS Cleanup**:
-   - Automated 1-click `uninstall.sh` removes menubar daemon, `~/Library/LaunchAgents/com.vocab.immersion.plist`, and data cache cleanly.
+   - Fetches vocabulary live via **Datamuse API**, **Free Dictionary API**, and **Wiktionary translation endpoints** and caches them locally for instant offline loading.
+   - **Phase 1 (Week 1)**: Hourly new unique words.
+   - **Phase 2 (Week 2+)**: Spaced Repetition (SM-2 Algorithm) revision popups + interactive multiple-choice quizzes.
 
 ---
 
 ## Quick Start & Usage
 
-### 1. Installation & Run
-The installer script automatically checks/installs Node.js (v20), installs PM2 globally, and resolves all application dependencies:
+### 1. Installation
+The installer script is self-sufficient. It automatically checks for Node.js, installs **Node.js v20 LTS** via Homebrew if missing, installs **PM2** globally, and sets up all local dependencies:
 ```bash
-# Run the self-sufficient installer
+# Set executable permission and run installer
 chmod +x ./install.sh
 ./install.sh
+```
 
-# Start the macOS Menubar Application in the foreground
+### 2. Run in Foreground (Testing)
+To launch the app in the foreground to test the menubar tray icon and trigger overlay previews immediately:
+```bash
 npm start
 ```
 
-### 2. Running in the Background (Node.js & macOS Services)
+### 3. Running in the Background (Production)
 
-#### Method A: Process Manager (PM2)
-PM2 is a robust Node.js process manager to keep the app running persistently in the background:
+#### Method A: Using PM2 (Recommended)
+PM2 runs the application persistently in the background, logs stdout/stderr, and restarts the process if it crashes:
 ```bash
-# Install PM2 globally
-npm install -g pm2
-
-# Start the Electron App silently in the background
-pm2 start "npm" --name "vocab-immersion" -- start
+# Start background daemon
+pm2 start npm --name "vocab-immersion" -- start
 
 # View running status
 pm2 status
 
-# Monitor live app logs
+# View real-time logs (popup trigger times, meeting guard deferments)
 pm2 logs vocab-immersion
 
-# Stop the background daemon
+# Stop the background process
 pm2 stop vocab-immersion
+
+# Delete process from PM2 list
+pm2 delete vocab-immersion
 ```
 
 #### Method B: macOS LaunchAgent Daemon
-To run it natively on boot using macOS's built-in service scheduler (equivalent to Homebrew services):
-1. Create a service file in `~/Library/LaunchAgents/com.vocab.immersion.plist`:
+To register the app as a native macOS service that runs silently at startup:
+1. Create a service description file in `~/Library/LaunchAgents/com.vocab.immersion.plist`:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -95,41 +104,70 @@ launchctl load ~/Library/LaunchAgents/com.vocab.immersion.plist
 launchctl unload ~/Library/LaunchAgents/com.vocab.immersion.plist
 ```
 
-### 3. Running Unit Tests
+---
+
+## Language Configuration
+
+By default, the application runs in **English Mode**. 
+
+To switch languages:
+1. Click the blue graduation/book icon in the macOS menubar tray.
+2. Hover over **Target Language**.
+3. Select **French (Français)** or **English**.
+
+The change will take effect immediately.
+
+---
+
+## Unit Testing
+We maintain unit tests for dictionary API parsing, spaced repetition calculations, and meeting protection process matching.
 ```bash
-# Execute Jest unit test suite
+# Execute Jest unit tests
 npm test
 ```
 
-### 4. Uninstall & Cleanup
+---
+
+## Uninstallation & Cleanup
+To completely stop the daemon, delete auto-start items, and wipe local data leaving **zero system residues**:
 ```bash
-# Run 1-click clean uninstaller script
+# Execute clean uninstaller
 ./uninstall.sh
 ```
 
 ---
 
-## Architecture Overview
+## Project Structure
 
 ```
 /Users/vikasanand/genAI/language-learning/
 ├── package.json               # Dependencies, build configs, test scripts
-├── main.js                    # Electron main process (timer, tray app, meeting guard, sleep monitor)
+├── main.js                    # Electron main process (tray app, meeting guard, sleep monitor)
 ├── preload.js                 # Safe IPC renderer bridge
-├── install.sh                 # 1-line CLI installer
+├── install.sh                 # Self-sufficient macOS prerequisites installer
 ├── uninstall.sh               # 1-click clean uninstaller script
+├── LICENSE                    # MIT License file
+├── .agents/
+│   └── AGENTS.md              # Project guidelines & memory
 ├── src/
-│   ├── index.html             # Full-screen Popup UI HTML
-│   ├── styles.css             # Glassmorphic Dark UI & 10s animation ring
-│   ├── app.js                 # Front-end UI logic (countdown, audio player, X close, pause 3h)
+│   ├── index.html             # Glassmorphic fullscreen overlay HTML layout
+│   ├── styles.css             # Dark theme, typography & 10s progress ring CSS
+│   ├── app.js                 # Front-end UI logic (countdown, audio, X close, 3h pause)
 │   └── engine/
-│       ├── dictionaryApi.js   # Live API Integration (FreeDictionary API, Datamuse, Wiktionary)
+│       ├── dictionaryApi.js   # Live API Integration (FreeDictionary, Datamuse, Wiktionary)
 │       ├── meetingGuard.js    # Zoom & Google Meet active call detector
 │       ├── srs.js             # Spaced Repetition (SM-2) engine & Quiz generator
-│       └── macEnforcer.js     # Sleep/wake listener & screen-saver level overlay
+│       ├── macEnforcer.js     # Sleep/wake listener & screen bounds overlay options
+│       └── logger.js          # Persistent log file & desktop notifier service
 └── tests/
     └── unit/
         ├── dictionaryApi.test.js
         ├── srs.test.js
         └── meetingGuard.test.js
 ```
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
