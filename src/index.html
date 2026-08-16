@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forced Vocabulary Immersion</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Ambient background glow effects -->
+  <div class="glow-orb-1"></div>
+  <div class="glow-orb-2"></div>
+
+  <!-- Main Popup Card -->
+  <div class="popup-container" id="popupContainer">
+    <!-- Top Bar Controls -->
+    <div class="top-bar">
+      <div class="badge-group">
+        <span class="badge" id="languageBadge">French (Français)</span>
+        <span class="badge badge-phase" id="phaseBadge">Hourly Immersion</span>
+      </div>
+      <!-- Immediate Top-Right Cross Close Button (Clickable from 0s) -->
+      <button class="close-btn" id="closeBtn" title="Close Popup (Emergency Dismiss)">✕</button>
+    </div>
+
+    <!-- Word Header Section -->
+    <div class="header-section">
+      <h1 class="word-title" id="wordTitle">Éphémère</h1>
+      <span class="phonetic-text" id="wordPhonetic">/e.fe.mɛʁ/</span>
+      
+      <!-- Manual Audio Speaker Button (No Auto-Play) -->
+      <button class="audio-btn" id="audioBtn" title="Listen to Pronunciation">
+        <svg viewBox="0 0 24 24">
+          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Definition & Example Content Section -->
+    <div class="content-section" id="vocabularyContent">
+      <!-- French Definition -->
+      <div class="definition-card">
+        <span class="def-lang-tag">Définition (Français)</span>
+        <p class="def-text" id="defFr">Qui ne dure que très peu de temps; passager et fugace.</p>
+      </div>
+
+      <!-- English Definition -->
+      <div class="definition-card">
+        <span class="def-lang-tag">Meaning (English)</span>
+        <p class="def-text" id="defEn">Lasting for a very short time; ephemeral, fleeting or transient.</p>
+      </div>
+
+      <!-- Example Usage Card -->
+      <div class="example-card">
+        <span class="ex-label">USAGE EXAMPLE</span>
+        <p class="ex-text" id="exFr">"La beauté des fleurs de cerisier est merveilleuse mais éphémère."</p>
+        <p class="ex-subtext" id="exEn">"The beauty of cherry blossoms is wonderful but ephemeral."</p>
+      </div>
+    </div>
+
+    <!-- Phase 2 Quiz Container (Hidden by default) -->
+    <div class="quiz-container" id="quizContent">
+      <p class="quiz-question" id="quizQuestion">What is the correct meaning of this word?</p>
+      <div class="options-grid" id="optionsGrid">
+        <!-- Dynamically rendered 4 quiz options -->
+      </div>
+    </div>
+
+    <!-- Bottom Action Bar -->
+    <div class="bottom-bar">
+      <!-- Snooze Button -->
+      <button class="pause-btn" id="pauseBtn">
+        <span>⏸</span> Pause for 3 Hours
+      </button>
+
+      <!-- Primary Confirmation Container with 10s Circular Timer -->
+      <div class="confirm-btn-container">
+        <div class="timer-ring">
+          <svg>
+            <circle class="bg" cx="22" cy="22" r="20"></circle>
+            <circle class="progress" id="progressCircle" cx="22" cy="22" r="20"></circle>
+          </svg>
+          <span class="timer-text" id="timerText">10</span>
+        </div>
+
+        <button class="confirm-btn" id="confirmBtn" disabled>
+          I Understand (10s)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
