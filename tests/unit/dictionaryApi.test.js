@@ -16,7 +16,7 @@ describe('DictionaryApiService Unit Tests', () => {
     const seenIds = ['fr_ephemere', 'fr_bienveillance', 'fr_serendipite', 'fr_resilience'];
     const word = await dictionaryApi.getNextWord('fr', seenIds);
     expect(word).toBeDefined();
-    expect(word.id).toBe('fr_melliflue');
+    expect(seenIds.includes(word.id)).toBe(false);
   });
 
   test('fetchEnglishWord handles live API fallback structure gracefully', async () => {

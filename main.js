@@ -15,7 +15,8 @@ const logger = require('./src/engine/logger');
 let overlayWindow = null;
 let tray = null;
 let hourlyInterval = null;
-let targetLanguage = 'en'; // Default target language: English
+let targetLanguage = 'alternate'; // Default: 'alternate' (Alternates English & French every hour)
+let lastLanguageUsed = 'fr'; // Tracks last used language for alternating
 
 /**
  * Trigger full-screen vocabulary popup
@@ -35,9 +36,17 @@ async function triggerVocabularyPopup() {
       return;
     }
 
+    // Determine active language for this trigger
+    let activeLang = targetLanguage;
+    if (targetLanguage === 'alternate') {
+      activeLang = lastLanguageUsed === 'en' ? 'fr' : 'en';
+      lastLanguageUsed = activeLang;
+      logger.info(`[VocabApp] Alternating mode: Selected target language '${activeLang}' for this hour.`);
+    }
+
     // Fetch next word
     const seenIds = srs.getSeenWordIds();
-    const wordData = await dictionaryApi.getNextWord(targetLanguage, seenIds);
+    const wordData = await dictionaryApi.getNextWord(activeLang, seenIds);
 
     if (!wordData) {
       logger.error('Failed to retrieve next vocabulary word from dictionary API.', null, true);
@@ -142,6 +151,16 @@ function updateTrayMenu() {
     {
       label: 'Target Language',
       submenu: [
+        {
+          label: 'Alternate (EN/FR)',
+          type: 'radio',
+          checked: targetLanguage === 'alternate',
+          click: () => { 
+            targetLanguage = 'alternate'; 
+            updateTrayMenu(); 
+            logger.info('[VocabApp] Changed target language to Alternating.');
+          }
+        },
         {
           label: 'French (Français)',
           type: 'radio',

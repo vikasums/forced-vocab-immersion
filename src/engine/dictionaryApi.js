@@ -5,7 +5,7 @@
 
 const HTTPS = require('https');
 
-// Fallback seed vocabulary with rich dual-language French & English definitions
+// Expanded fallback seed vocabulary with rich dual-language French & English definitions
 const SEED_FRENCH_WORDS = [
   {
     id: 'fr_ephemere',
@@ -66,6 +66,66 @@ const SEED_FRENCH_WORDS = [
     example_en: 'The pianist played a mellifluous melody in the dim light.',
     audioText: 'melliflue',
     language: 'fr'
+  },
+  {
+    id: 'fr_flaner',
+    word: 'Flâner',
+    phonetic: '/flɑ.ne/',
+    partOfSpeech: 'verbe',
+    definition_fr: 'Se promener sans but précis, au gré de son inspiration.',
+    definition_en: 'To wander or stroll aimlessly, loafing or idling.',
+    example_fr: 'J\'adore flâner le long des quais de la Seine le dimanche.',
+    example_en: 'I love to stroll along the banks of the Seine on Sundays.',
+    audioText: 'flâner',
+    language: 'fr'
+  },
+  {
+    id: 'fr_depaysement',
+    word: 'Dépaysement',
+    phonetic: '/de.pe.iz.mɑ̃/',
+    partOfSpeech: 'nom masculin',
+    definition_fr: 'Sentiment d\'étrangeté et de nouveauté ressenti dans un pays étranger.',
+    definition_en: 'The feeling of disorientation or change of scenery experienced in a new country.',
+    example_fr: 'Ce voyage au Japon m\'a procuré un dépaysement total.',
+    example_en: 'This trip to Japan gave me a total change of scenery.',
+    audioText: 'dépaysement',
+    language: 'fr'
+  },
+  {
+    id: 'fr_retrouvailles',
+    word: 'Retrouvailles',
+    phonetic: '/ʁə.tʁu.vaj/',
+    partOfSpeech: 'nom féminin pluriel',
+    definition_fr: 'Fait de se retrouver après une longue séparation.',
+    definition_en: 'The reunion or meeting again after a long period of separation.',
+    example_fr: 'Leurs retrouvailles à la gare après des années ont été très émouvantes.',
+    example_en: 'Their reunion at the station after years was very moving.',
+    audioText: 'retrouvailles',
+    language: 'fr'
+  },
+  {
+    id: 'fr_crepuscule',
+    word: 'Crépuscule',
+    phonetic: '/kʁe.pys.kyl/',
+    partOfSpeech: 'nom masculin',
+    definition_fr: 'Lumière diffuse qui succède immédiatement au coucher du soleil.',
+    definition_en: 'The period of twilight or dusk just after sunset.',
+    example_fr: 'Le crépuscule peignait le ciel de nuances violettes et orangées.',
+    example_en: 'The twilight painted the sky with shades of purple and orange.',
+    audioText: 'crépuscule',
+    language: 'fr'
+  },
+  {
+    id: 'fr_pluviophile',
+    word: 'Pluviophile',
+    phonetic: '/ply.vjo.fil/',
+    partOfSpeech: 'nom ou adjectif',
+    definition_fr: 'Qui aime la pluie, y trouve de la joie et de la paix.',
+    definition_en: 'A lover of rain; someone who finds joy and peace of mind during rainy days.',
+    example_fr: 'En tant que pluviophile, j\'adore lire près de la fenêtre sous l\'orage.',
+    example_en: 'As a pluviophile, I love reading near the window during a storm.',
+    audioText: 'pluviophile',
+    language: 'fr'
   }
 ];
 
@@ -109,6 +169,66 @@ const SEED_ENGLISH_WORDS = [
     example_en: 'Her speech was so eloquent that it moved the entire audience to tears.',
     audioText: 'eloquent',
     language: 'en'
+  },
+  {
+    id: 'en_acumen',
+    word: 'Acumen',
+    phonetic: '/əˈkjuː.mən/',
+    partOfSpeech: 'noun',
+    definition_en: 'The ability to make good judgments and quick decisions, typically in a particular domain.',
+    example_en: 'Her business acumen helped the startup scale rapidly.',
+    audioText: 'acumen',
+    language: 'en'
+  },
+  {
+    id: 'en_alacrity',
+    word: 'Alacrity',
+    phonetic: '/əˈlæk.rə.ti/',
+    partOfSpeech: 'noun',
+    definition_en: 'Brisk and cheerful readiness to do something.',
+    example_en: 'She accepted the challenge with alacrity and started planning.',
+    audioText: 'alacrity',
+    language: 'en'
+  },
+  {
+    id: 'en_anomaly',
+    word: 'Anomaly',
+    phonetic: '/əˈnɒm.ə.li/',
+    partOfSpeech: 'noun',
+    definition_en: 'Something that deviates from what is standard, normal, or expected.',
+    example_en: 'The sudden cold wave in summer was an anomaly.',
+    audioText: 'anomaly',
+    language: 'en'
+  },
+  {
+    id: 'en_assiduous',
+    word: 'Assiduous',
+    phonetic: '/əˈsɪd.ju.əs/',
+    partOfSpeech: 'adjective',
+    definition_en: 'Showing great care, attention, and persistent effort.',
+    example_en: 'Through assiduous research, they solved the programming bug.',
+    audioText: 'assiduous',
+    language: 'en'
+  },
+  {
+    id: 'en_cacophony',
+    word: 'Cacophony',
+    phonetic: '/kəˈkɒf.ə.ni/',
+    partOfSpeech: 'noun',
+    definition_en: 'A harsh, discordant mixture of sounds.',
+    example_en: 'The market was filled with a cacophony of street vendors and car horns.',
+    audioText: 'cacophony',
+    language: 'en'
+  },
+  {
+    id: 'en_cognizant',
+    word: 'Cognizant',
+    phonetic: '/ˈkɒɡ.nɪ.zənt/',
+    partOfSpeech: 'adjective',
+    definition_en: 'Having knowledge or being fully aware of something.',
+    example_en: 'We are cognizant of the challenges ahead but remain optimistic.',
+    audioText: 'cognizant',
+    language: 'en'
   }
 ];
 
@@ -121,7 +241,7 @@ class DictionaryApiService {
    * Helper function to make HTTPS GET requests
    */
   fetchJson(url) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       HTTPS.get(url, { headers: { 'User-Agent': 'ForcedVocabApp/1.0' } }, (res) => {
         let data = '';
         res.on('data', (chunk) => (data += chunk));
@@ -136,7 +256,7 @@ class DictionaryApiService {
             resolve(null);
           }
         });
-      }).on('error', (err) => resolve(null));
+      }).on('error', () => resolve(null));
     });
   }
 
@@ -197,9 +317,14 @@ class DictionaryApiService {
       return selected;
     }
 
-    // Fallback: pick any word from pool to prevent crash
+    // Fallback/Reset seen log if pool is fully exhausted, starting rotation fresh
     const randomIndex = Math.floor(Math.random() * pool.length);
-    return pool[randomIndex];
+    const selected = pool[randomIndex];
+    if (language === 'en') {
+      const live = await this.fetchEnglishWord(selected.word);
+      if (live) return { ...selected, ...live };
+    }
+    return selected;
   }
 }
 
